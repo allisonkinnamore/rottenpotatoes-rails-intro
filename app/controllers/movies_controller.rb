@@ -15,6 +15,10 @@ class MoviesController < ApplicationController
     @_ratings = params[:ratings]||session[:ratings]||{}
     @movies = Movie.where(rating: @_ratings.keys).order(sort_by)
     
+    if @_ratings == {}
+      @_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+    end
+    
     if params[:sort_by] != session[:sort_by] or params[:ratings] != session[:ratings]
       session[:sort_by], session[:ratings] = sort_by, @_ratings
       flash.keep
